@@ -118,11 +118,21 @@ public function preview($id)
 }
 public function respond(Request $request, $id)
 {
+    $request->validate([
+        'admin_response' => 'nullable|string',
+        'status' => 'required|in:pending,diproses,selesai,ditolak',
+    ]);
+
     $pengaduan = Pengaduan::findOrFail($id);
-    $pengaduan->admin_response = $request->input('admin_response');
+
+    $pengaduan->admin_response = $request->admin_response;
+    $pengaduan->status = $request->status;
+
     $pengaduan->save();
 
-    return redirect()->route('pengaduan.index')->with('success', 'Respon berhasil dikirim!');
+    return redirect()
+        ->route('pengaduan.index')
+        ->with('success', 'Respon berhasil dikirim!');
 }
 public function selesai()
 {
@@ -133,5 +143,68 @@ public function selesai()
 
     return view('admin.crud-done', compact('pengaduans'));
 }
+public function dashboarad()
+{
+    $total   = Pengaduan::count();
+    $selesai = Pengaduan::where('status', 'selesai')->count();
+    $pending = Pengaduan::where('status', 'pending')->count();
+    $ditolak = Pengaduan::where('status', 'ditolak')->count();
 
+    $pct_selesai = $total > 0 ? round(($selesai / $total) * 100) : 0;
+    $pct_pending = $total > 0 ? round(($pending / $total) * 100) : 0;
+    $pct_ditolak = $total > 0 ? round(($ditolak / $total) * 100) : 0;
+
+    // Data per bulan untuk line chart
+    $chartData = [
+        'labels'  => ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+        'total'   => [],
+        'selesai' => [],
+        'pending' => [],
+        'ditolak' => [],
+    ];
+
+    for ($i = 1; $i <= 12; $i++) {
+        $chartData['total'][]   = Pengaduan::whereMonth('created_at', $i)->whereYear('created_at', now()->year)->count();
+        $chartData['selesai'][] = Pengaduan::where('status', 'selesai')->whereMonth('created_at', $i)->whereYear('created_at', now()->year)->count();
+        $chartData['pending'][] = Pengaduan::where('status', 'pending')->whereMonth('created_at', $i)->whereYear('created_at', now()->year)->count();
+        $chartData['ditolak'][] = Pengaduan::where('status', 'ditolak')->whereMonth('created_at', $i)->whereYear('created_at', now()->year)->count();
+    }
+
+    return view('admin.dashboarad', compact(
+        'total', 'selesai', 'pending', 'ditolak',
+        'pct_selesai', 'pct_pending', 'pct_ditolak',
+        'chartData'
+    ));
+}
+public function dashboardMasyarakat()
+{
+    // cegah admin masuk dashboard masyarakat
+    if (auth()->user()->role !== 'Masyarakat') {
+        return redirect('/dashboarad');
+    }
+
+    $userId = auth()->id();
+
+    $total    = Pengaduan::where('user_id', $userId)->count();
+    $selesai  = Pengaduan::where('user_id', $userId)->where('status', 'selesai')->count();
+    $pending  = Pengaduan::where('user_id', $userId)->where('status', 'pending')->count();
+    $ditolak  = Pengaduan::where('user_id', $userId)->where('status', 'ditolak')->count();
+    $direspon = Pengaduan::where('user_id', $userId)->whereNotNull('admin_response')->count();
+
+    $pct_selesai  = $total > 0 ? round(($selesai  / $total) * 100) : 0;
+    $pct_pending  = $total > 0 ? round(($pending  / $total) * 100) : 0;
+    $pct_ditolak  = $total > 0 ? round(($ditolak  / $total) * 100) : 0;
+    $pct_direspon = $total > 0 ? round(($direspon / $total) * 100) : 0;
+
+    $laporanTerbaru = Pengaduan::where('user_id', $userId)
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('pages.dashboard.ecommerce', compact(
+        'total', 'selesai', 'pending', 'ditolak', 'direspon',
+        'pct_selesai', 'pct_pending', 'pct_ditolak', 'pct_direspon',
+        'laporanTerbaru'
+    ));
+}
 }

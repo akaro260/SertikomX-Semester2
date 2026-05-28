@@ -12,13 +12,7 @@ class MenuHelper
 
         $items = [
             // MENU SEMUA USER
-            [
-                'icon' => 'dashboard',
-                'name' => 'Dashboard',
-                'subItems' => [
-                    ['name' => 'Ecommerce', 'path' => '/dashboard'],
-                ],
-            ],
+
             [
                 'icon' => 'user-profile',
                 'name' => 'User Profile',
@@ -28,6 +22,11 @@ class MenuHelper
 
         // MENU KHUSUS ADMIN
         if ($user && $user->role === 'admin') {
+              $items[] = [
+                'icon' => 'dashboard',
+                'name' => 'Dashboard',
+                'path' => '/dashboarad',
+            ];
             $items[] = [
                 'name' => 'CRUD',
                 'icon' => 'tables',
@@ -68,6 +67,11 @@ class MenuHelper
 
         // MENU KHUSUS MASYARAKAT
         if ($user && $user->role === 'Masyarakat') {
+                        $items[] = [            
+                'icon' => 'dashboard',
+                'name' => 'Dashboard',
+                'path' => '/dashboard',
+            ];
             $items[] = [
                 'icon' => 'ai-assistant',
                 'name' => 'Form Pengaduan',
@@ -85,6 +89,7 @@ class MenuHelper
                 'name' => 'Riwayat Laporan',
                 'path' => '/riwayat-laporan',
             ];
+
         }
 
         return $items;

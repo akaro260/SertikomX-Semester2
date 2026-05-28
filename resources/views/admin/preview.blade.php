@@ -47,23 +47,7 @@
             </p>
         </div>
 
-        <div>
-            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Status
-            </h3>
 
-            <span class="inline-flex rounded-full px-3 py-1 text-sm font-semibold
-
-                {{ $pengaduans->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
-                {{ $pengaduans->status == 'diproses' ? 'bg-blue-100 text-blue-700' : '' }}
-                {{ $pengaduans->status == 'selesai' ? 'bg-green-100 text-green-700' : '' }}
-                {{ $pengaduans->status == 'ditolak' ? 'bg-red-100 text-red-700' : '' }}
-            ">
-
-                {{ ucfirst($pengaduans->status) }}
-
-            </span>
-        </div>
 
         <!-- FORM RESPON ADMIN -->
         <form action="{{ route('pengaduan.respond', $pengaduans->id) }}" method="POST" class="mt-6">
@@ -80,7 +64,36 @@
                     class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                     placeholder="Tulis respon admin...">{{ old('admin_response', $pengaduans->admin_response) }}</textarea>
             </div>
+                <div>
+        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Status Pengaduan
+        </label>
 
+            <select name="status"
+                    class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+
+                <option value="pending"
+                    {{ $pengaduans->status == 'pending' ? 'selected' : '' }}>
+                    Pending
+                </option>
+
+                <option value="diproses"
+                    {{ $pengaduans->status == 'diproses' ? 'selected' : '' }}>
+                    diproses
+                </option>
+
+                <option value="selesai"
+                    {{ $pengaduans->status == 'selesai' ? 'selected' : '' }}>
+                    Selesai
+                </option>
+
+                <option value="ditolak"
+                    {{ $pengaduans->status == 'ditolak' ? 'selected' : '' }}>
+                    Ditolak
+                </option>
+
+            </select>
+        </div>
             <button type="submit"
                 class="rounded-xl bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 transition">
                 Kirim Respon
@@ -92,4 +105,4 @@
 
 
 
-        @endsection
+@endsection

@@ -92,37 +92,6 @@
                               file:text-sm file:font-medium
                               file:text-white hover:file:bg-blue-600">
             </div>
-            <!-- Status -->
-<div>
-    <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-        Status Pengaduan
-    </label>
-
-        <select name="status"
-                class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
-
-            <option value="pending"
-                {{ $pengaduan->status == 'pending' ? 'selected' : '' }}>
-                 Pending
-            </option>
-
-            <option value="diproses"
-                {{ $pengaduan->status == 'diproses' ? 'selected' : '' }}>
-                diproses
-            </option>
-
-            <option value="selesai"
-                {{ $pengaduan->status == 'selesai' ? 'selected' : '' }}>
-                Selesai
-            </option>
-
-            <option value="ditolak"
-                {{ $pengaduan->status == 'ditolak' ? 'selected' : '' }}>
-                Ditolak
-            </option>
-
-        </select>
-    </div>
 
             <!-- Buttons -->
             <div class="flex items-center justify-end gap-3 pt-4">

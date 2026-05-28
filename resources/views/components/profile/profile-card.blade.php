@@ -21,7 +21,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="order-2 flex grow items-center gap-2 xl:order-3 xl:justify-end">
+                <!-- <div class="order-2 flex grow items-center gap-2 xl:order-3 xl:justify-end">
                     <button
                         class="shadow-theme-xs flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                         <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -61,7 +61,7 @@
                                 fill="" />
                         </svg>
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <button @click="$dispatch('open-profile-info-modal')"

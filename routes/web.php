@@ -19,15 +19,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Pindahin semua route yang butuh login ke sini
-    Route::get('/dashboard', function () {
-        return view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']);
-    })->name('dashboard');
+    Route::get('/dashboarad', [PengaduanController::class, 'dashboarad'])->name('dashboarad');
 
     Route::get('/calendar', function () {
         return view('pages.calender', ['title' => 'Calendar']);
     })->name('calendar');
+    Route::get('/dashboard', [PengaduanController::class, 'dashboardMasyarakat'])
+        ->middleware(['auth'])
+        ->name('dashboard');
 });
 // profile pages
+
 Route::get('/profile', function () {
     return view('pages.profile', ['title' => 'Profile']);
 })->name('profile');
